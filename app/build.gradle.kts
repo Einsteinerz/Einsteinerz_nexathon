@@ -1,10 +1,12 @@
+import java.util.Properties  // Added import to fix unresolved reference "util"
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
 }
 
 val secretsFile = rootProject.file("secrets.properties")
-val secrets = java.util.Properties()
+val secrets = Properties()  // Corrected usage with explicit import
 if (secretsFile.exists()) {
     secrets.load(secretsFile.inputStream())
 } else {
@@ -35,7 +37,7 @@ android {
             )
         }
     }
-    
+
     packaging {
         resources {
             excludes += listOf(
@@ -70,20 +72,20 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    
+
     // Material Design and AppCompat
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+
     // Activity and Fragment
-    implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
-    
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    
+
     // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -94,14 +96,14 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:5.0.0")
     implementation("org.apache.xmlbeans:xmlbeans:4.0.0")
     implementation("org.slf4j:slf4j-nop:1.7.36")
-    
+
     // OpenAI API Client
     implementation("com.aallam.openai:openai-client:3.6.3")
     implementation("io.ktor:ktor-client-android:2.3.7")
-    
+
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    
+
     // Permissions handling
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
 }
