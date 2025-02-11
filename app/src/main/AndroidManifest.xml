@@ -2,11 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Internet permission for OpenAI API -->
     <uses-permission android:name="android.permission.INTERNET" />
+    
+    <!-- Storage permissions for different Android versions -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_DOCUMENTS" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" 
+        android:minSdkVersion="33" />
+    <uses-permission android:name="android.permission.READ_MEDIA_DOCUMENTS" 
+        android:minSdkVersion="33" />
 
     <application
         android:allowBackup="true"
@@ -18,18 +23,48 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Test_max"
         android:requestLegacyExternalStorage="true"
-        tools:targetApi="31">
+        android:usesCleartextTraffic="true"
+        android:preserveLegacyExternalStorage="true"
+        tools:targetApi="33"
+        android:name=".App">
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Test_max">
+            android:theme="@style/Theme.Test_max"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
+            <!-- File type handling -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data 
+                    android:scheme="file" 
+                    android:host="*" 
+                    android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                <data 
+                    android:scheme="content" 
+                    android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+            </intent-filter>
         </activity>
+
+        <!-- FileProvider for handling files -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>
